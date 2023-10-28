@@ -18,8 +18,7 @@ class RegisterApi extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
-            'level' =>'required',
+            'password' => 'required|min:8',
         ]);
 
         //if validation fails
@@ -31,9 +30,10 @@ class RegisterApi extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'password' => bcrypt($request->password),
+            'level' => 0,
         ]);
-
+        //dd($user);
         //return response JSON user is created
         if ($user) {
             return response()->json([

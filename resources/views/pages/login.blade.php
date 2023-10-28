@@ -33,25 +33,35 @@
                         </h4>
                         <p class="text-muted">Sistem Klasifikasi Data Penduduk Untuk Menentukan TPS
                             Menggunakan Metode KNN (Studi Kasus : Pemilu Desa Bululawang)</p>
-                        <form method="POST" action="#" class="needs-validation" novalidate="">
+                        <form method="POST" action="{{ route('post-login') }}" class="needs-validation" novalidate="">
+                            @csrf
+
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input id="email" type="email" class="form-control" name="email" tabindex="1"
-                                    required autofocus>
-                                <div class="invalid-feedback">
-                                    Please fill in your email
-                                </div>
+                                <input id="email" type="email"
+                                    class="form-control @error('email') is-invalid @enderror" name="email"
+                                    tabindex="1" required autofocus>
+
+                                @error('email')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
                                 <div class="d-block">
                                     <label for="password" class="control-label">Password</label>
                                 </div>
-                                <input id="password" type="password" class="form-control" name="password"
+                                <input id="password" type="password"
+                                    class="form-control @error('password') is-invalid @enderror" name="password"
                                     tabindex="2" required>
-                                <div class="invalid-feedback">
-                                    please fill in your password
-                                </div>
+
+                                @error('password')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
 
                             <div class="form-group">
@@ -73,9 +83,10 @@
                             </div>
 
                             <div class="mt-5 text-center">
-                                Don't have an account? <a href="auth-register.html">Create new one</a>
+                                Don't have an account? <a href="{{ route('register') }}">Create new one</a>
                             </div>
                         </form>
+
 
                         <div class="text-center mt-5 text-small">
                             Copyright &copy; Ahmad Zulfan Najib. Made with 💙 by Stisla
