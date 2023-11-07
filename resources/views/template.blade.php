@@ -13,13 +13,14 @@
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <!-- CSS Libraries -->
+    @yield('style')
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('stisla/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('stisla/assets/css/components.css') }}">
 
-    @yield('style')
-    
+  
+
 </head>
 
 <body>
@@ -32,10 +33,15 @@
                     <ul class="navbar-nav mr-3">
                         <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i
                                     class="fas fa-bars"></i></a></li>
-                        <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
-                                    class="fas fa-search"></i></a></li>
+                        <li class="nav-link">
+                            <div id="clock" class="nav-link nav-link-lg nav-link-user">
+                                <div id="date-time" class="d-sm-none d-lg-inline-block"></div>
+                            </div>
+                        </li>
                     </ul>
+
                 </form>
+
                 <ul class="navbar-nav navbar-right">
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user">
@@ -71,33 +77,21 @@
 
                     <ul class="sidebar-menu">
                         <li class="menu-header">Dashboard</li>
-                        <li class="active">
-                            <a class="nav-link" href="#">
+                        <li class="{{ request()->is('/') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('home') }}">
                                 <i class="fas fa-fire"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
-
-                        {{-- Dropdown Example --}}
-                        {{-- <li class="nav-item dropdown">
-                            <a href="#" class="nav-link has-dropdown"><i
-                                    class="fas fa-fire"></i><span>Dashboard</span></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="index-0.html">General Dashboard</a></li>
-                                <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li>
-                            </ul>
-                        </li> --}}
-                        {{-- / Dropdown Example --}}
-
                         <li class="menu-header">Data</li>
-                        <li>
-                            <a class="nav-link" href="#">
+                        <li class="{{ request()->is('penduduk') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('penduduk') }}">
                                 <i class="fas fa-user"></i>
                                 <span>Data Penduduk</span>
                             </a>
                         </li>
-                        <li>
-                            <a class="nav-link" href="#">
+                        <li class="{{ request()->is('tps') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('tps') }}">
                                 <i class="fas fa-home"></i>
                                 <span>Data TPS</span>
                             </a>
@@ -161,6 +155,66 @@
     <script src="{{ asset('stisla/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('stisla/assets/js/custom.js') }}"></script>
 
+    <script>
+        window.addEventListener("load", () => {
+            clock();
+
+            function clock() {
+                const today = new Date();
+
+                // get time components
+                const hours = today.getHours();
+                const minutes = today.getMinutes();
+                const seconds = today.getSeconds();
+
+                //add '0' to hour, minute & second when they are less 10
+                const hour = hours < 10 ? "0" + hours : hours;
+                const minute = minutes < 10 ? "0" + minutes : minutes;
+                const second = seconds < 10 ? "0" + seconds : seconds;
+
+                //make clock a 12-hour time clock
+                const hourTime = hour > 12 ? hour - 12 : hour;
+
+                // if (hour === 0) {
+                //   hour = 12;
+                // }
+                //assigning 'am' or 'pm' to indicate time of the day
+                const ampm = hour < 12 ? "AM" : "PM";
+
+                // get date components
+                const month = today.getMonth();
+                const year = today.getFullYear();
+                const day = today.getDate();
+
+                //declaring a list of all months in  a year
+                const monthList = [
+                    "Januari",
+                    "Februari",
+                    "Maret",
+                    "April",
+                    "Mei",
+                    "Juni",
+                    "Juli",
+                    "Agustus",
+                    "September",
+                    "Oktober",
+                    "Nopember",
+                    "Desember"
+                ];
+
+                //get current date and time
+                const date = monthList[month] + " " + day + ", " + year;
+                const time = hourTime + ":" + minute + ":" + second + ampm;
+
+                //combine current date and time
+                const dateTime = date + " - " + time;
+
+                //print current date and time to the DOM
+                document.getElementById("date-time").innerHTML = dateTime;
+                setTimeout(clock, 1000);
+            }
+        });
+    </script>
     <!-- Page Specific JS File -->
     @yield('script')
 </body>
