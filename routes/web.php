@@ -22,12 +22,12 @@ use App\Http\Controllers\TestController;
 //pages
 
 // dashboard
-Route::get('/', [DashboardController::class,'index'])->name('home');
+Route::get('/', [DashboardController::class, 'index'])->name('home');
 
 // Penduduk
-Route::get('/penduduk', [PendudukController::class,'index'])->name('penduduk');
-Route::get('/penduduk/tambah', [PendudukController::class,'create'])->name('create-penduduk');
-Route::post('/penduduk', [PendudukController::class,'store'])->name('post-penduduk');
+Route::get('/penduduk', [PendudukController::class, 'index'])->name('penduduk');
+Route::get('/penduduk/tambah', [PendudukController::class, 'create'])->name('create-penduduk');
+Route::post('/penduduk', [PendudukController::class, 'store'])->name('post-penduduk');
 Route::post('/penduduk/tambah', [PendudukController::class, 'storeSingle'])->name('post-penduduk-single');
 Route::get('/penduduk/{id}', [PendudukController::class, 'edit'])->name('edit-penduduk');
 Route::put('/penduduk/{id}', [PendudukController::class, 'update'])->name('update-penduduk');
@@ -35,6 +35,12 @@ Route::delete('/penduduk/{id}', [PendudukController::class, 'delete'])->name('de
 
 // TPS
 Route::get('/tps', [TpsController::class, 'index'])->name('tps');
+Route::get('/tps/tambah', [TpsController::class, 'create'])->name('create-tps');
+Route::post('/tps', [TpsController::class, 'store'])->name('post-tps');
+Route::get('/tps/{id}', [TpsController::class, 'edit'])->name('edit-tps');
+Route::put('/tps/{id}', [TpsController::class, 'update'])->name('update-tps');
+Route::get('/tps/delete/{id}', [TpsController::class, 'destroy'])->name('delete-tps');
+
 
 
 // Login
