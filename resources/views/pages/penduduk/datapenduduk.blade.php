@@ -17,9 +17,13 @@
 @section('body')
     <div class="row">
         <div class="col-12 mb-4">
-            @if (Session::has('error'))
+            @if ($errors->any())
                 <div class="alert alert-danger">
-                    {{ Session::get('error') }}
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
             @if (session('success'))
@@ -27,15 +31,29 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <div class="alert alert-warning alert-has-icon">
-                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                <div class="alert-body">
-                    <div class="alert-title">Peringatan</div>
-                    Data alamat belum dibersihkan 
-                    <br>
-                    <button class="btn btn-primary mt-2" onclick="bersihkanData()">Bersihkan Data!</button>
+            @if ($belum)
+                <div class="alert alert-warning alert-has-icon">
+                    <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                    <div class="alert-body">
+                        <div class="alert-title">Peringatan</div>
+                        Terdapat Data alamat yang belum dibersihkan
+                        <br>
+                        <a class="btn btn-primary mt-2" href="{{ route('penduduk-cleaning') }}">Bersihkan Data!</a>
+                    </div>
                 </div>
-            </div>
+            @elseif ($belumAlamat)
+                <div class="alert alert-warning alert-has-icon">
+                    <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                    <div class="alert-body">
+                        <div class="alert-title">Peringatan</div>
+                        Terdapat Data alamat yang belum memiliki id
+                        <br>
+                        <a class="btn btn-primary mt-2" href="{{ route('alamat-convert') }}">Perbaiki Data!</a>
+                    </div>
+                </div>
+            @else
+                <div></div>
+            @endif
             <div class="card">
                 <div class="card-header">
                     <h4>Olah Data Penduduk</h4>
@@ -47,8 +65,10 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>ID</th>
                                     <th>Nama</th>
                                     <th>Alamat</th>
+                                    <th>ID Alamat</th>
                                     <th>Rt</th>
                                     <th>Rw</th>
                                     <th>TPS</th>
@@ -60,8 +80,10 @@
                                 @foreach ($datas as $data)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $data->id }}</td>
                                         <td>{{ $data->nama }}</td>
                                         <td>{{ $data->alamat }}</td>
+                                        <td>{{ $data->id_alamat }}</td>
                                         <td>{{ $data->rt }}</td>
                                         <td>{{ $data->rw }}</td>
                                         <td>{{ $data->tps }}</td>

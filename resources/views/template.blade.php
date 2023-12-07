@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ asset('stisla/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('stisla/assets/css/components.css') }}">
 
-  
+
 
 </head>
 
@@ -97,11 +97,13 @@
                             </a>
                         </li>
                         <li class="menu-header">Klasifikasi</li>
-                        <li class="nav-item dropdown">
+                        <li
+                            class="dropdown
+                            {{ request()->is('klasifikasi') || request()->is('testing') ? 'active' : '' }}">
                             <a href="#" class="nav-link has-dropdown"><i class="fas fa-robot"></i><span>Sistem
                                     Klasifikasi</span></a>
                             <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="index-0.html">KNN Data Penduduk</a></li>
+                                <li><a class="nav-link" href="{{ route('klasifikasi') }}">KNN Data Penduduk</a></li>
                                 <li><a class="nav-link" href="index.html">Confussion Matrix</a></li>
                             </ul>
                         </li>

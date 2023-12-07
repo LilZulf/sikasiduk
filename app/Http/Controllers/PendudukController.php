@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\PendudukImport;
+use App\Models\Alamat;
 use Illuminate\Http\Request;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +16,11 @@ class PendudukController extends Controller
     public function index()
     {
         $data = Penduduk::all();
-        return view("pages.penduduk.datapenduduk", ["datas" => $data]);
+        $belum = $data->where('status', '=', '0')->where('uid', '1')->first();
+        $belumAlamat = Penduduk::where('id_alamat', null)
+            ->where('uid', 1)
+            ->first();
+        return view("pages.penduduk.datapenduduk", ["datas" => $data, 'belum' => $belum, 'belumAlamat' => $belumAlamat]);
     }
     public function create()
     {
@@ -122,6 +127,64 @@ class PendudukController extends Controller
                 ->with('error', 'data tidak ditemukan');
         }
         $data->delete();
-        return redirect()->route('penduduk')->with('success','Data berhasil dihapus');
+        return redirect()->route('penduduk')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function alamatConvert()
+    {
+        $data = Penduduk::where('id_alamat', null)
+            ->where('uid', '1')
+            ->orderBy('alamat', 'asc') // 'asc' untuk ascending, 'desc' untuk descending
+            ->get();
+        foreach ($data as $i) {
+            $penduduk = Penduduk::find($i->id);
+            if (!$penduduk) {
+                return redirect()->route("penduduk")->with("error", "penduduk tidak ditemukan");
+            }
+            $alamat = Alamat::where('nama_alamat', $i->alamat)->first();
+            if (!$alamat) {
+                $alamat = Alamat::create([
+                    'nama_alamat' => $i->alamat
+                ]);
+            }
+            $penduduk->id_alamat = $alamat->id;
+            $penduduk->save();
+        }
+        return redirect()->route('penduduk')->with('success', 'Alamat berhasil mendapat ID');
+    }
+
+    public function alamatCleaning(Request $request)
+    {
+        $data = Penduduk::where('status', '=', '0')->where('uid', '1')->get();
+        foreach ($data as $i) {
+            $penduduk = Penduduk::find($i->id);
+            if (!$penduduk) {
+                return redirect()->route("penduduk")->with("error", "penduduk tidak ditemukan");
+            }
+            $upperCaseAlamat = strtoupper($penduduk->alamat);
+            $upperCaseNama = strtoupper($penduduk->nama);
+            $cleanedString = str_replace([
+                ' ',
+                '.',
+                '/',
+                '-',
+                'GG',
+                'GANG',
+                'DSN',
+                'DUSUN',
+                'NO',
+                'JL',
+                'JLN',
+                'JALAN',
+                'PERUM',
+                'PERUMAHAN'
+            ], '', $upperCaseAlamat);
+            $penduduk->nama = $upperCaseNama;
+            $penduduk->alamat = $cleanedString;
+            $penduduk->status = '1';
+            $penduduk->save();
+        }
+
+        return redirect()->route('penduduk')->with('success', 'Data berhasil dibersihkan');
     }
 }
