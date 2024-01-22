@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Penduduk;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 
 class PendudukController extends Controller
@@ -15,6 +16,14 @@ class PendudukController extends Controller
     //
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->level != 0) {
+            return redirect()->route("home")
+                ->withErrors("Anda Bukan Admin")
+                ->withInput();
+        }
+
         $data = Penduduk::all();
         $belum = $data->where('status', '=', '0')->where('uid', '1')->first();
         $belumAlamat = Penduduk::where('id_alamat', null)
@@ -22,6 +31,48 @@ class PendudukController extends Controller
             ->first();
         return view("pages.penduduk.datapenduduk", ["datas" => $data, 'belum' => $belum, 'belumAlamat' => $belumAlamat]);
     }
+
+    public function indexAudit()
+    {
+        $user = Auth::user();
+
+        if ($user->level != 1) {
+            return redirect()->route("home")
+                ->withErrors("Anda Bukan Auditor")
+                ->withInput();
+        }
+
+        $data = Penduduk::where('tps', '>', '0')->get();
+        $belum = $data->where('status', '=', '0')->where('uid', '1')->first();
+        $belumAlamat = Penduduk::where('id_alamat', null)
+            ->where('uid', 1)
+            ->first();
+        return view("pages.penduduk.auditpenduduk", ["datas" => $data, 'belum' => $belum, 'belumAlamat' => $belumAlamat]);
+    }
+
+    public function auditAll()
+    {
+        $penduduk = Penduduk::where('tps', '>', '0')->where('status', '=', '1')->get();
+        foreach ($penduduk as $i) {
+            $audit = Penduduk::find($i->id);
+            $audit->status = 2;
+            $audit->save();
+        }
+        return redirect()
+            ->route("audit-penduduk")
+            ->with("success", "Berhasil Audit Semua");
+    }
+
+    public function auditSingle($id)
+    {
+        $audit = Penduduk::find($id);
+        $audit->status = 2;
+        $audit->save();
+        return redirect()
+            ->route("audit-penduduk")
+            ->with("success", "Berhasil Audit " . $audit->nama);
+    }
+
     public function create()
     {
         return view("pages.penduduk.tambahpenduduk");
@@ -48,6 +99,7 @@ class PendudukController extends Controller
             return response()->json(['success' => $namaExcel]);
         } catch (\Exception $e) {
             // Handle other exceptions
+
             return response()->json(['success' => $e]);
         }
     }

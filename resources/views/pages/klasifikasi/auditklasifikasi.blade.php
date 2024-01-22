@@ -217,43 +217,87 @@
                             @csrf
                             <button type="submit" class="btn btn-primary">Proses Klasifikasi</button>
                         </form>
+                    @elseif($proses->status == 2)
+                        <div class="col"> <a href="{{ route('cetak-klasifikasi', ['id_proses' => $proses->id]) }}"
+                                class="btn btn-primary">Cetak Klasifikasi</a></div>
                     @else
-                        <a href="{{ route('cetak-klasifikasi', ['id_proses' => $proses->id]) }}"
-                            class="btn btn-primary">Cetak Klasifikasi</a>
+                        <div class="row">
+                            <div class="col"> <a href="{{ route('cetak-klasifikasi', ['id_proses' => $proses->id]) }}"
+                                    class="btn btn-primary">Cetak Klasifikasi</a></div>
+                            <div class="col"> <a
+                                    href="{{ route('audit-all-klasifikasi', ['id_proses' => $proses->id]) }}"
+                                    class="btn btn-primary">Audit Semua</a></div>
+                        </div>
                     @endif
 
                     <hr>
                     <!-- Tabel Data Testing -->
                     <h4>Hasil Klasifikasi:</h4>
                     <div class="table-responsive">
-                        <table class="table table-striped" id="">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>ID penduduk</th>
-                                    <th>Nama</th>
-                                    <th>RT</th>
-                                    <th>RW</th>
-                                    <th>ID Alamat</th>
-                                    <th>TPS Prediksi</th>
-                                    {{-- <th>TPS Asli</th> --}}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($prediksi as $item)
+                        @if ($proses->status == 1)
+                            <table class="table table-striped" id="">
+                                <thead>
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->id_penduduk }}</td>
-                                        <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->rt }}</td>
-                                        <td>{{ $item->rw }}</td>
-                                        <td>{{ $item->id_alamat }}</td>
-                                        <td>{{ $item->prediksi }}</td>
-                                        {{-- <td>{{ $item->tps }}</td> --}}
+                                        <th>No</th>
+                                        <th>ID penduduk</th>
+                                        <th>Nama</th>
+                                        <th>RT</th>
+                                        <th>RW</th>
+                                        <th>ID Alamat</th>
+                                        <th>TPS Prediksi</th>
+                                        <th>AUDIT</th>
+                                        {{-- <th>TPS Asli</th> --}}
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($prediksi as $item)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->id_penduduk }}</td>
+                                            <td>{{ $item->nama }}</td>
+                                            <td>{{ $item->rt }}</td>
+                                            <td>{{ $item->rw }}</td>
+                                            <td>{{ $item->id_alamat }}</td>
+                                            <td>{{ $item->prediksi }}</td>
+                                            <td> <a href="{{ route('audit-prediksi-penduduk', ['id' => $item->id, 'prediksi' => $item->prediksi]) }}"
+                                                    class="btn btn-primary">Audit</a></td>
+                                            {{-- <td>{{ $item->tps }}</td> --}}
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <table class="table table-striped" id="">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>ID penduduk</th>
+                                        <th>Nama</th>
+                                        <th>RT</th>
+                                        <th>RW</th>
+                                        <th>ID Alamat</th>
+                                        <th>TPS Prediksi</th>
+
+                                        {{-- <th>TPS Asli</th> --}}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($prediksi as $item)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->id_penduduk }}</td>
+                                            <td>{{ $item->nama }}</td>
+                                            <td>{{ $item->rt }}</td>
+                                            <td>{{ $item->rw }}</td>
+                                            <td>{{ $item->id_alamat }}</td>
+                                            <td>{{ $item->prediksi }}</td>
+                                            {{-- <td>{{ $item->tps }}</td> --}}
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+
                     </div>
                 </div>
             </div>

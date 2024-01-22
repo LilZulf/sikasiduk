@@ -1,3 +1,8 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    $currentPath = Request::path();
+    $user = Auth::user();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,12 +52,12 @@
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="{{ asset('stisla/assets/img/avatar/avatar-1.png') }}"
                                 class="rounded-circle mr-1">
-                            <div class="d-sm-none d-lg-inline-block">Hi, Champ!</div>
+                            <div class="d-sm-none d-lg-inline-block">Hi, {{ $user->name }}</div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-title">Logged in 5 min ago</div>
                             <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item has-icon text-danger">
+                            <a href="{{ route('logout') }}" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
                         </div>
@@ -71,32 +76,40 @@
 
                     {{-- === logo Minimize === --}}
                     <div class="sidebar-brand sidebar-brand-sm">
-                        <a href="index.html">Si</a>
+                        <a href="/">Si</a>
                     </div>
                     {{-- / logo --}}
 
-                    <ul class="sidebar-menu">
-                        <li class="menu-header">Dashboard</li>
-                        <li class="{{ request()->is('/') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('home') }}">
-                                <i class="fas fa-fire"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="menu-header">Data</li>
-                        <li class="{{ request()->is('penduduk') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('penduduk') }}">
-                                <i class="fas fa-user"></i>
-                                <span>Data Penduduk</span>
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('tps') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('tps') }}">
-                                <i class="fas fa-home"></i>
-                                <span>Data TPS</span>
-                            </a>
-                        </li>
-                        <li class="menu-header">Klasifikasi</li>
+                    @if ($user->level == 0)
+                        <ul class="sidebar-menu">
+                            <li class="menu-header">Dashboard</li>
+                            <li class="{{ request()->is('/') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('home') }}">
+                                    <i class="fas fa-fire"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="menu-header">Data</li>
+                            <li class="{{ request()->is('penduduk') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('penduduk') }}">
+                                    <i class="fas fa-user"></i>
+                                    <span>Data Penduduk</span>
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('tps') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('tps') }}">
+                                    <i class="fas fa-home"></i>
+                                    <span>Data TPS</span>
+                                </a>
+                            </li>
+                            <li class="menu-header">Klasifikasi</li>
+                            <li class="{{ request()->is('klasifikasi') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('klasifikasi') }}">
+                                    <i class="fas fa-robot"></i>
+                                    <span>Klasifikasi Penduduk</span>
+                                </a>
+                            </li>
+                            {{-- <li class="menu-header">Klasifikasi</li>
                         <li
                             class="dropdown
                             {{ request()->is('klasifikasi') || request()->is('testing') ? 'active' : '' }}">
@@ -106,8 +119,51 @@
                                 <li><a class="nav-link" href="{{ route('klasifikasi') }}">KNN Data Penduduk</a></li>
                                 <li><a class="nav-link" href="index.html">Confussion Matrix</a></li>
                             </ul>
-                        </li>
-                    </ul>
+                        </li> --}}
+                        </ul>
+                    @else
+                        <ul class="sidebar-menu">
+                            <li class="menu-header">Dashboard</li>
+                            <li class="{{ request()->is('/') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('home') }}">
+                                    <i class="fas fa-fire"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="menu-header">Data</li>
+                            <li class="{{ request()->is('audit/penduduk') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('audit-penduduk') }}">
+                                    <i class="fas fa-user"></i>
+                                    <span>Audit Data Penduduk</span>
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('tps') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('tps') }}">
+                                    <i class="fas fa-home"></i>
+                                    <span>Audit Data TPS</span>
+                                </a>
+                            </li>
+                            <li class="menu-header">Klasifikasi</li>
+                            <li class="{{ request()->is('klasifikasi') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('klasifikasi') }}">
+                                    <i class="fas fa-robot"></i>
+                                    <span>Audit Klasifikasi Penduduk</span>
+                                </a>
+                            </li>
+                            {{-- <li class="menu-header">Klasifikasi</li>
+                        <li
+                            class="dropdown
+                            {{ request()->is('klasifikasi') || request()->is('testing') ? 'active' : '' }}">
+                            <a href="#" class="nav-link has-dropdown"><i class="fas fa-robot"></i><span>Sistem
+                                    Klasifikasi</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="{{ route('klasifikasi') }}">KNN Data Penduduk</a></li>
+                                <li><a class="nav-link" href="index.html">Confussion Matrix</a></li>
+                            </ul>
+                        </li> --}}
+                        </ul>
+                    @endif
+
                 </aside>
             </div>
             {{-- / Sidebar --}}

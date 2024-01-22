@@ -1,3 +1,8 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    $currentPath = Request::path();
+    $user = Auth::user();
+@endphp
 @extends('template')
 @section('title')
     <title>Sikasiduk - Klasifikasi Penduduk</title>
@@ -44,8 +49,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nilai K</th>
-                                    <th>Nama Panitia</th>
-                                    <th>File</th>
+                                    {{-- <th>Nama Panitia</th>
+                                    <th>File</th> --}}
                                     <th>Status</th>
                                     <th>Dibuat Pada</th>
                                     <th>Action</th>
@@ -56,31 +61,39 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->nilai_k }}</td>
-                                        <td>Najib</td>
-                                        <td>{{ $item->file }}</td>
+                                        {{-- <td>Najib</td>
+                                        <td>{{ $item->file }}</td> --}}
                                         <td>
                                             @if ($item->status == 0)
                                                 <span class="badge badge-warning">Belum Proses</span>
-                                            @else
+                                            @elseif($item->status == 1)
                                                 <span class="badge badge-info">Sudah di Proses</span>
+                                            @elseif($item->status == 2)
+                                                <span class="badge badge-info">Sudah di Audit</span>
                                             @endif
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            @if ($item->status == 0)
-                                                <a href="{{ route('detail-klasifikasi', ['id' => $item->id]) }}"
-                                                    class="btn btn-primary">Proses</a>
-                                                <form action="{{ route('delete-klasifikasi', ['id' => $item->id]) }}"
-                                                    method="POST" style="display: inline-block;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                                                </form>
+                                            @if ($user->level == 0)
+                                                @if ($item->status == 0)
+                                                    <a href="{{ route('detail-klasifikasi', ['id' => $item->id]) }}"
+                                                        class="btn btn-primary">Proses</a>
+                                                    <form action="{{ route('delete-klasifikasi', ['id' => $item->id]) }}"
+                                                        method="POST" style="display: inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger"
+                                                            onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                                    </form>
+                                                @else
+                                                    <a href="{{ route('detail-klasifikasi', ['id' => $item->id]) }}"
+                                                        class="btn btn-primary">Lihat</a>
+                                                @endif
                                             @else
-                                                <a href="{{ route('detail-klasifikasi', ['id' => $item->id]) }}"
+                                                <a href="{{ route('detail-audit-klasifikasi', ['id' => $item->id]) }}"
                                                     class="btn btn-primary">Lihat</a>
                                             @endif
+
                                         </td>
                                     </tr>
                                 @endforeach

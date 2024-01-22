@@ -20,9 +20,13 @@
 @section('body')
     <div class="row">
         <div class="col-12 mb-4">
-            @if (Session::has('error'))
+            @if ($errors->any())
                 <div class="alert alert-danger">
-                    {{ Session::get('error') }}
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
             <div class="card">

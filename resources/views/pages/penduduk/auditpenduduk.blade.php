@@ -31,33 +31,10 @@
                     {{ session('success') }}
                 </div>
             @endif
-            @if ($belum)
-                <div class="alert alert-warning alert-has-icon">
-                    <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                    <div class="alert-body">
-                        <div class="alert-title">Peringatan</div>
-                        Terdapat Data alamat yang belum dibersihkan
-                        <br>
-                        <a class="btn btn-primary mt-2" href="{{ route('penduduk-cleaning') }}">Bersihkan Data!</a>
-                    </div>
-                </div>
-            @elseif ($belumAlamat)
-                <div class="alert alert-warning alert-has-icon">
-                    <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                    <div class="alert-body">
-                        <div class="alert-title">Peringatan</div>
-                        Terdapat Data alamat yang belum memiliki id
-                        <br>
-                        <a class="btn btn-primary mt-2" href="{{ route('alamat-convert') }}">Perbaiki Data!</a>
-                    </div>
-                </div>
-            @else
-                <div></div>
-            @endif
             <div class="card">
                 <div class="card-header">
-                    <h4>Olah Data Penduduk</h4>
-                    <a href="{{ route('create-penduduk') }}" class="btn btn-success ml-auto">Tambah Data</a>
+                    <h4>Audit Data Penduduk</h4>
+                    <a href="{{ route('audit-all-penduduk') }}" class="btn btn-success ml-auto">Audit Semua</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -101,19 +78,10 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($data->status == 2)
-                                                <span></span>
-                                            @else
-                                                <a href="{{ route('edit-penduduk', ['id' => $data->id]) }}"
-                                                    class="btn btn-primary">Edit</a>
+                                            @if ($data->status != 2)
+                                                <a href="{{ route('audit-single-penduduk', ['id' => $data->id]) }}"
+                                                    class="btn btn-primary">Audit</a>
                                             @endif
-                                            <form action="{{ route('delete-penduduk', ['id' => $data->id]) }}"
-                                                method="POST" style="display: inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

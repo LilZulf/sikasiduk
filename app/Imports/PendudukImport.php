@@ -15,11 +15,14 @@ class PendudukImport implements ToModel
     public function model(array $row)
     {
         // Define the expected header values
-        $expectedHeader = ['NO','NAMA', 'ALAMAT', 'RT', 'RW', 'TPS'];
+        $expectedHeader = ['NO', 'NAMA', 'ALAMAT', 'RT', 'RW', 'TPS'];
 
         // Compare the current row with the expected header
         if ($row === $expectedHeader) {
             return null; // Skip the header row
+        }
+        if (!array_filter($row)) {
+            return null;
         }
 
         return new Penduduk([
