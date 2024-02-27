@@ -7,8 +7,7 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Techstack](#techstack)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Introduction
 Population Data Classification Website for Determining TPS (Voting Places) using the Laravel Framework.
@@ -30,3 +29,5 @@ Population Data Classification Website for Determining TPS (Voting Places) using
 - PHP-ML
 - Sanctum
 - Maatwebsite/Excel
+
+Contact me if you need demo 👉 najibzulfan@gmail.com
