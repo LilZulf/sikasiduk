@@ -68,6 +68,7 @@ class KlasifikasiController extends Controller
 
     public function store(Request $request)
     {
+        // Nilai K = 5
         $validator = Validator::make($request->all(), [
             "nilai_k" => "required|numeric|min:1"
         ]);
@@ -77,6 +78,7 @@ class KlasifikasiController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+
         try {
             Proses::create([
                 'nilai_k' => $request->nilai_k,
@@ -135,11 +137,11 @@ class KlasifikasiController extends Controller
         $penduduk = $penduduk->where('tps', '>', 0);
         $training = Training::join('penduduk', 'trainings.id_penduduk', '=', 'penduduk.id')
             ->where('trainings.id_proses', $id)
-            ->select('penduduk.rt', 'penduduk.rw', 'penduduk.id_alamat', 'penduduk.tps', 'trainings.*')
+            ->select('penduduk.nik', 'penduduk.rt', 'penduduk.rw', 'penduduk.id_alamat', 'penduduk.tps', 'trainings.*')
             ->get();
         $testing = Testing::join('penduduk', 'testings.id_penduduk', '=', 'penduduk.id')
             ->where('testings.id_proses', $id)
-            ->select('penduduk.rt', 'penduduk.rw', 'penduduk.id_alamat', 'penduduk.nama', 'penduduk.tps', 'testings.*')
+            ->select('penduduk.nik', 'penduduk.rt', 'penduduk.rw', 'penduduk.id_alamat', 'penduduk.nama', 'penduduk.tps', 'testings.*')
             ->get();
         $prediksi = $testing->whereNotNull('prediksi');
         return view('pages.klasifikasi.detailklasifikasi', [
@@ -226,11 +228,12 @@ class KlasifikasiController extends Controller
 
     public function prediksi(Request $request, $id_proses)
     {
+        $proses = Proses::find($id_proses);
         $dataset = $this->prepareDataset($id_proses);
         $trainingSamples = $dataset->getSamples();
         $trainingLabels = $dataset->getTargets();
 
-        $classifier = new KNearestNeighbors();
+        $classifier = new KNearestNeighbors($k = $proses->nilai_k);
         $classifier->train($trainingSamples, $trainingLabels);
 
         $testing = Testing::join('penduduk', 'testings.id_penduduk', '=', 'penduduk.id')

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('penduduk', function (Blueprint $table) {
             $table->id();
+            $table->string('nik')->unique();
             $table->string('nama');
             $table->string('alamat');
             $table->integer('rt');
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->string('tps')->nullable();
             $table->string('uid');
             $table->smallInteger('status');
+            $table->integer('id_alamat')->nullable();
             $table->timestamps();
         });
     }

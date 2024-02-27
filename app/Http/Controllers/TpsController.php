@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tps;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class TpsController extends Controller
 {
@@ -23,10 +24,10 @@ class TpsController extends Controller
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
             'tps' => 'required|unique:tps',
-            'nama_tps' => 'required',
+            'nama_tps' => 'required|max:7',
             'alamat' => 'required',
-            'rt' => 'required',
-            'rw' => 'required',
+            'rt' => 'required|numeric|min:0|max:50',
+            'rw' => 'required|numeric|min:0|max:50',
             'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -71,7 +72,7 @@ class TpsController extends Controller
     {
         $tps = Tps::find($id);
         if (!$tps) {
-            return redirect()->route("tps")->with("error", "Data tidak ditemukan");
+            return redirect()->route("tps")->with("error", "TPS tidak ditemukan");
         }
 
         return view('pages.tps.edittps', ['data' => $tps]);
@@ -80,10 +81,10 @@ class TpsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nama_tps' => 'required',
+            'nama_tps' => 'required|max:7',
             'alamat' => 'required',
-            'rt' => 'required',
-            'rw' => 'required',
+            'rt' => 'required|numeric|min:0|max:50',
+            'rw' => 'required|numeric|min:0|max:50',
             'foto' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -115,7 +116,7 @@ class TpsController extends Controller
                 ->route('tps')
                 ->with('error', $e);
         }
-        return redirect()->route('tps')->with('success','Berhasil Update TPS');
+        return redirect()->route('tps')->with('success', 'Berhasil Update TPS');
     }
 
     public function destroy($id)
@@ -125,7 +126,45 @@ class TpsController extends Controller
             return redirect()->route('tps')->with('error', 'Data tidak ditemukan');
         }
         $tps->delete();
-        return redirect()->route('tps')->with('success','Berhasil Hapus TPS');
+        return redirect()->route('tps')->with('success', 'Berhasil Hapus TPS');
+    }
+
+    public function indexAudit()
+    {
+        $user = Auth::user();
+
+        if ($user->level != 1) {
+            return redirect()->route("home")
+                ->withErrors("Anda Bukan Auditor")
+                ->withInput();
+        }
+
+        $data = Tps::all();
+        $belum = $data->where('status', '=', '0')->where('uid', '1')->first();
+        return view("pages.tps.audittps", ["datas" => $data, 'belum' => $belum]);
+    }
+
+    public function auditAll()
+    {
+        $tps = Tps::where('tps', '>', '0')->where('status', '=', '1')->get();
+        foreach ($tps as $i) {
+            $audit = Tps::find($i->id);
+            $audit->status = 2;
+            $audit->save();
+        }
+        return redirect()
+            ->route("audit-tps")
+            ->with("success", "Berhasil Audit Semua");
+    }
+
+    public function auditSingle($id)
+    {
+        $audit = Tps::find($id);
+        $audit->status = 2;
+        $audit->save();
+        return redirect()
+            ->route("audit-tps")
+            ->with("success", "Berhasil Audit " . $audit->nama);
     }
 
 }

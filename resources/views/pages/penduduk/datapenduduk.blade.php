@@ -55,9 +55,12 @@
                 <div></div>
             @endif
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                     <h4>Olah Data Penduduk</h4>
-                    <a href="{{ route('create-penduduk') }}" class="btn btn-success ml-auto">Tambah Data</a>
+                    <div>
+                        <a href="{{ route('cetak-penduduk') }}" class="btn btn-primary">Cetak Penduduk</a>
+                        <a href="{{ route('create-penduduk') }}" class="btn btn-success ml-2">Tambah Data</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -65,7 +68,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>ID</th>
+                                    <th>NIK</th>
                                     <th>Nama</th>
                                     <th>Alamat</th>
                                     <th>ID Alamat</th>
@@ -80,13 +83,13 @@
                                 @foreach ($datas as $data)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $data->id }}</td>
+                                        <td>{{ $data->nik }}</td>
                                         <td>{{ $data->nama }}</td>
                                         <td>{{ $data->alamat }}</td>
                                         <td>{{ $data->id_alamat }}</td>
                                         <td>{{ $data->rt }}</td>
                                         <td>{{ $data->rw }}</td>
-                                        <td>{{ $data->tps }}</td>
+                                        <td><a href="{{ route('edit-tps', ['id' => $data->tps]) }}">{{ $data->tps }}</a></td>
                                         <td>
                                             @if ($data->status == 0)
                                                 <span class="badge badge-warning">Belum diolah</span>
@@ -106,14 +109,15 @@
                                             @else
                                                 <a href="{{ route('edit-penduduk', ['id' => $data->id]) }}"
                                                     class="btn btn-primary">Edit</a>
+                                                <form action="{{ route('delete-penduduk', ['id' => $data->id]) }}"
+                                                    method="POST" style="display: inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                                </form>
                                             @endif
-                                            <form action="{{ route('delete-penduduk', ['id' => $data->id]) }}"
-                                                method="POST" style="display: inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
-                                            </form>
+
                                         </td>
                                     </tr>
                                 @endforeach

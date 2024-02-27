@@ -5,7 +5,7 @@
 
 @section('header')
     <h1>
-        Data TPS
+        Audit Data TPS
     </h1>
 @endsection
 
@@ -19,11 +19,6 @@
         <i class="fas fa-plus"></i>
         Tambah TPS
     </a>
-    @if (Session::has('error'))
-        <div class="alert alert-danger">
-            {{ Session::get('error') }}
-        </div>
-    @endif
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -47,9 +42,9 @@
                         </div>
                         <div class="article-badge">
                             @if ($item->status != 2)
-                                <a href="{{ route('delete-tps', ['id' => $item->tps]) }}"
-                                    class="article-badge-item bg-danger">
-                                    <i class="fas fa-trash"></i>Hapus
+                                <a href="{{ route('audit-single-tps', ['id' => $item->tps]) }}"
+                                    class="article-badge-item bg-success">
+                                    <i class="fas fa-check-circle"></i>Audit
                                 </a>
                             @else
                                 <span class="article-badge-item bg-success">

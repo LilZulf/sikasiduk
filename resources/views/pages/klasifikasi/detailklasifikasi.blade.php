@@ -39,7 +39,7 @@
                     <h4>Nilai K</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('post-klasifikasi') }}" method="post" enctype="multipart/form-data">
+                    <form action="#" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="nilai_k">Nilai K</label>
@@ -62,7 +62,7 @@
                                 <label for="id_penduduk">Pilih Penduduk:</label>
                                 <select name="id_penduduk" id="id_penduduk2" class="form-control select2">
                                     @foreach ($penduduk_testing as $person)
-                                        <option value="{{ $person->id }}">{{ $person->id }}. {{ $person->nama }} -
+                                        <option value="{{ $person->id }}">{{ $person->nik }}. {{ $person->nama }} -
                                             {{ $person->rt }},
                                             {{ $person->rw }}, {{ $person->id_alamat }} </option>
                                     @endforeach
@@ -86,7 +86,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>ID penduduk</th>
+                                    <th>NIK</th>
                                     <th>RT</th>
                                     <th>RW</th>
                                     <th>ID Alamat</th>
@@ -100,7 +100,7 @@
                                 @foreach ($testing as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->id_penduduk }}</td>
+                                        <td>{{ $item->nik }}</td>
                                         <td>{{ $item->rt }}</td>
                                         <td>{{ $item->rw }}</td>
                                         <td>{{ $item->id_alamat }}</td>
@@ -136,7 +136,7 @@
                                 <label for="id_penduduk">Pilih Penduduk:</label>
                                 <select name="id_penduduk" id="id_penduduk1" class="form-control select2" id="training">
                                     @foreach ($penduduk as $person)
-                                        <option value="{{ $person->id }}">{{ $person->id }}. {{ $person->nama }} -
+                                        <option value="{{ $person->id }}">{{ $person->nik }}. {{ $person->nama }} -
                                             {{ $person->rt }},
                                             {{ $person->rw }}, {{ $person->id_alamat }} </option>
                                     @endforeach
@@ -169,7 +169,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>ID penduduk</th>
+                                    <th>NIK</th>
                                     <th>RT</th>
                                     <th>RW</th>
                                     <th>ID Alamat</th>
@@ -183,7 +183,7 @@
                                 @foreach ($training as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->id_penduduk }}</td>
+                                        <td>{{ $item->nik }}</td>
                                         <td>{{ $item->rt }}</td>
                                         <td>{{ $item->rw }}</td>
                                         <td>{{ $item->id_alamat }}</td>
@@ -230,7 +230,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>ID penduduk</th>
+                                    <th>NIK</th>
                                     <th>Nama</th>
                                     <th>RT</th>
                                     <th>RW</th>
@@ -243,7 +243,7 @@
                                 @foreach ($prediksi as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->id_penduduk }}</td>
+                                        <td>{{ $item->nik }}</td>
                                         <td>{{ $item->nama }}</td>
                                         <td>{{ $item->rt }}</td>
                                         <td>{{ $item->rw }}</td>

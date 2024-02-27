@@ -102,6 +102,12 @@
                                     <span>Data TPS</span>
                                 </a>
                             </li>
+                            <li class="{{ request()->is('users') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('users') }}">
+                                    <i class="fas fa-user"></i>
+                                    <span>Manajemen User</span>
+                                </a>
+                            </li>
                             <li class="menu-header">Klasifikasi</li>
                             <li class="{{ request()->is('klasifikasi') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('klasifikasi') }}">
@@ -138,7 +144,7 @@
                                 </a>
                             </li>
                             <li class="{{ request()->is('tps') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('tps') }}">
+                                <a class="nav-link" href="{{ route('audit-tps') }}">
                                     <i class="fas fa-home"></i>
                                     <span>Audit Data TPS</span>
                                 </a>

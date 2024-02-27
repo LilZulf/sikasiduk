@@ -21,14 +21,34 @@
                     {{ Session::get('error') }}
                 </div>
             @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="card">
                 <div class="card-header">
                     <h4>Formulir data penduduk</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('update-penduduk', ['id' => $id]) }}" method="post" onsubmit="return validateForm()">
+                    <form action="{{ route('update-penduduk', ['id' => $id]) }}" method="post"
+                        onsubmit="return validateForm()">
                         @csrf
                         @method('PUT')
+                        <div class="form-group">
+                            <label for="nik">NIK:</label>
+                            <input type="number" class="form-control" value="{{ $data->nik }}" id="nik"
+                                name="nik" readonly>
+                        </div>
                         <div class="form-group">
                             <label for="nama">Nama:</label>
                             <input type="text" class="form-control" value="{{ $data->nama }}" id="nama"

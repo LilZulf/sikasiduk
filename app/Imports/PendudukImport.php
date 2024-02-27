@@ -15,7 +15,7 @@ class PendudukImport implements ToModel
     public function model(array $row)
     {
         // Define the expected header values
-        $expectedHeader = ['NO', 'NAMA', 'ALAMAT', 'RT', 'RW', 'TPS'];
+        $expectedHeader = ['NIK', 'NAMA', 'ALAMAT', 'RT', 'RW', 'TPS'];
 
         // Compare the current row with the expected header
         if ($row === $expectedHeader) {
@@ -27,6 +27,7 @@ class PendudukImport implements ToModel
 
         return new Penduduk([
             //
+            'nik' => $row[0],
             'nama' => $row[1],
             'alamat' => $row[2],
             'rt' => $row[3],

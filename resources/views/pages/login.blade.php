@@ -64,27 +64,14 @@
                                 @enderror
                             </div>
 
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
-                                        id="remember-me">
-                                    <label class="custom-control-label" for="remember-me">Remember Me</label>
-                                </div>
-                            </div>
 
                             <div class="form-group text-right">
-                                <a href="auth-forgot-password.html" class="float-left mt-3">
-                                    Forgot Password?
-                                </a>
                                 <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right"
                                     tabindex="4">
                                     Login
                                 </button>
                             </div>
 
-                            <div class="mt-5 text-center">
-                                Don't have an account? <a href="{{ route('register') }}">Create new one</a>
-                            </div>
                         </form>
 
 
@@ -99,16 +86,13 @@
                     </div>
                 </div>
                 <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom"
-                    data-background="{{ asset('stisla/assets/img/unsplash/login-bg.jpg') }}">
+                    data-background="{{ asset('stisla/assets/img/unsplash/jbtb.jpg') }}">
                     <div class="absolute-bottom-left index-2">
                         <div class="text-light p-5 pb-2">
                             <div class="mb-5 pb-3">
-                                <h1 class="mb-2 display-4 font-weight-bold">Good Morning</h1>
-                                <h5 class="font-weight-normal text-muted-transparent">Bali, Indonesia</h5>
+                                <h1 class="mb-2 display-4 font-weight-bold">Selamat Datang</h1>
+                                <h5 class="font-weight-normal text-muted-transparent">Jembatan Kali Talang, Bululawang</h5>
                             </div>
-                            Photo by <a class="text-light bb" target="_blank"
-                                href="https://unsplash.com/photos/a8lTjWJJgLA">Justin Kauffman</a> on <a
-                                class="text-light bb" target="_blank" href="https://unsplash.com">Unsplash</a>
                         </div>
                     </div>
                 </div>

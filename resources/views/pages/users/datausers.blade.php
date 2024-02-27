@@ -1,11 +1,16 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    $currentPath = Request::path();
+    $user = Auth::user();
+@endphp
 @extends('template')
 @section('title')
-    <title>Sikasiduk - Data Penduduk</title>
+    <title>Sikasiduk - Manajemen Users</title>
 @endsection
 
 @section('header')
     <h1>
-        Data Penduduk
+        Manajemen Users
     </h1>
 @endsection
 
@@ -31,12 +36,11 @@
                     {{ session('success') }}
                 </div>
             @endif
+
             <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h4>Audit Data Penduduk</h4>
-                    <div>
-                        <a href="{{ route('audit-all-penduduk') }}" class="btn btn-success ml-auto">Audit Semua</a>
-                    </div>
+                <div class="card-header">
+                    <h4>Proses Manajemen Users</h4>
+                    <a href="{{ route('create-users') }}" class="btn btn-success ml-auto">Tambah User</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -44,46 +48,37 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>ID</th>
-                                    <th>Nama</th>
-                                    <th>Alamat</th>
-                                    <th>ID Alamat</th>
-                                    <th>Rt</th>
-                                    <th>Rw</th>
-                                    <th>TPS</th>
-                                    <th>Status</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Level</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($datas as $data)
+                                @foreach ($users as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $data->id }}</td>
-                                        <td>{{ $data->nama }}</td>
-                                        <td>{{ $data->alamat }}</td>
-                                        <td>{{ $data->id_alamat }}</td>
-                                        <td>{{ $data->rt }}</td>
-                                        <td>{{ $data->rw }}</td>
-                                        <td>{{ $data->tps }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->email }}</td>
+                                        {{-- <td>Najib</td>
+                                        <td>{{ $item->file }}</td> --}}
                                         <td>
-                                            @if ($data->status == 0)
-                                                <span class="badge badge-warning">Belum diolah</span>
-                                            @elseif ($data->status == 1)
-                                                <span class="badge badge-info">Sudah diolah</span>
-                                            @elseif ($data->status == 2)
-                                                <span class="badge badge-primary">Sudah Audit</span>
-                                            @elseif ($data->status == 3)
-                                                <span class="badge badge-success">Disetujui</span>
-                                            @else
-                                                <span class="badge badge-secondary">Undefined</span>
+                                            @if ($item->level == 0)
+                                                <span class="badge badge-warning">Admin</span>
+                                            @elseif($item->level == 1)
+                                                <span class="badge badge-info">Auditor</span>
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($data->status != 2)
-                                                <a href="{{ route('audit-single-penduduk', ['id' => $data->id]) }}"
-                                                    class="btn btn-primary">Audit</a>
-                                            @endif
+                                            <a href="{{ route('edit-users', ['id' => $item->id]) }}"
+                                                class="btn btn-primary">Edit</a>
+                                            <form action="{{ route('delete-users', ['id' => $item->id]) }}"
+                                                method="POST" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

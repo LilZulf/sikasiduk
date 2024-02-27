@@ -39,7 +39,7 @@
                     <h4>Nilai K</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('post-klasifikasi') }}" method="post" enctype="multipart/form-data">
+                    <form action="#" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="nilai_k">Nilai K</label>

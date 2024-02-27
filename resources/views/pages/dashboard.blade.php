@@ -46,6 +46,26 @@
                 </div>
             </div>
         </div>
+
+        <!-- Display Population Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Jumlah Penduduk</h2>
+                    <h5 class="card-text"><i class="fas fa-users"></i> {{$data->count()}} </h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display Number of TPS Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Jumlah TPS</h2>
+                    <h5 class="card-text"><i class="fas fa-map-marker-alt"></i> {{$tps->count()}} </h5>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 

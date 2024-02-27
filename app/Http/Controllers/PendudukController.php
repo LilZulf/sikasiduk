@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PendudukExport;
 use App\Imports\PendudukImport;
 use App\Models\Alamat;
 use Illuminate\Http\Request;
@@ -30,6 +31,30 @@ class PendudukController extends Controller
             ->where('uid', 1)
             ->first();
         return view("pages.penduduk.datapenduduk", ["datas" => $data, 'belum' => $belum, 'belumAlamat' => $belumAlamat]);
+    }
+
+    public function cetakPenduduk(Request $request)
+    {
+        $data = Penduduk::join('tps', 'tps.tps', 'penduduk.tps')
+            ->where('penduduk.status', '=', '2')
+            ->where('penduduk.uid', '1')
+            ->get([
+                'penduduk.nik',
+                'penduduk.nama',
+                'penduduk.alamat', // Assuming alamat is a field in the penduduk table
+                'penduduk.rt',
+                'penduduk.rw',
+                'penduduk.tps',
+                'tps.alamat AS alamat_tps', // Alias alamat from tps as alamat_tps
+            ]);
+
+        if ($data->count() < 1)
+            return redirect()
+                ->route('penduduk')
+                ->withErrors('Belum ada data yang sudah di audit');
+
+        $export = new PendudukExport($data);
+        return Excel::download($export, 'penduduk_fix' . '.xlsx');
     }
 
     public function indexAudit()
@@ -106,10 +131,11 @@ class PendudukController extends Controller
     public function storeSingle(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|string',
-            'alamat' => 'required|string',
-            'rt' => 'required|integer',
-            'rw' => 'required|integer',
+            'nik' => 'required|numeric|digits:16',
+            'nama' => 'required|string|max:255',
+            'alamat' => 'required|string|max:255',
+            'rt' => 'required|numeric|min:0|max:50',
+            'rw' => 'required|numeric|min:0|max:50',
             'tps' => 'string|nullable'
         ]);
         if ($validator->fails()) {
@@ -117,8 +143,15 @@ class PendudukController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+        $cekNik = Penduduk::where('nik', $request->nik)->get()->first();
+        if ($cekNik) {
+            return redirect()
+                ->route('penduduk')
+                ->withErrors('NIK Sudah ada');
+        }
 
         Penduduk::create([
+            "nik" => $request->nik,
             "nama" => $request->nama,
             "alamat" => $request->alamat,
             "rt" => $request->rt,
@@ -143,10 +176,10 @@ class PendudukController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|string',
+            'nama' => 'required|string|max:255',
             'alamat' => 'required|string',
-            'rt' => 'required|integer',
-            'rw' => 'required|integer',
+            'rt' => 'required|numeric|min:0|max:50',
+            'rw' => 'required|numeric|min:0|max:50',
             'tps' => 'string|nullable'
         ]);
         if ($validator->fails()) {

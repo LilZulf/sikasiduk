@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TpsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 
@@ -28,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Penduduk
     Route::get('/penduduk', [PendudukController::class, 'index'])->name('penduduk');
+    Route::get('/penduduk/cetak', [PendudukController::class, 'cetakPenduduk'])->name('cetak-penduduk');
     Route::get('/penduduk/cleaning', [PendudukController::class, 'alamatCleaning'])->name('penduduk-cleaning');
     Route::get('/penduduk/convertalamat', [PendudukController::class, 'alamatConvert'])->name('alamat-convert');
     Route::get('/penduduk/tambah', [PendudukController::class, 'create'])->name('create-penduduk');
@@ -41,6 +43,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/audit/penduduk', [PendudukController::class, 'indexAudit'])->name('audit-penduduk');
     Route::get('/audit/all-penduduk', [PendudukController::class, 'auditAll'])->name('audit-all-penduduk');
     Route::get('/audit/penduduk/{id}', [PendudukController::class, 'auditSingle'])->name('audit-single-penduduk');
+
+    // Audit TPS
+    Route::get('/audit/tps', [TpsController::class, 'indexAudit'])->name('audit-tps');
+    Route::get('/audit/all-tps', [TpsController::class, 'auditAll'])->name('audit-all-tps');
+    Route::get('/audit/tps/{id}', [TpsController::class, 'auditSingle'])->name('audit-single-tps');
 
     // TPS
     Route::get('/tps', [TpsController::class, 'index'])->name('tps');
@@ -72,6 +79,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/audit/klasifikasi/{id}', [KlasifikasiController::class, 'detailAudit'])->name('detail-audit-klasifikasi');
     Route::get('/audit/penduduk/{id}/{prediksi}', [KlasifikasiController::class, 'auditSingle'])->name('audit-prediksi-penduduk');
 
+    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::get('/users/tambah', [UserController::class, 'create'])->name('create-users');
+    Route::post('/users', [UserController::class, 'store'])->name('post-users');
+    Route::get('/users/{id}', [UserController::class, 'edit'])->name('edit-users');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('update-users');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('delete-users');
+
+
+    Route::get('/register', [RegisterController::class, 'index'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register'])->name('post-register');
     // Klasifikasi Prediksi
     Route::post('/klasifikasi/prediksi/{id_proses}', [KlasifikasiController::class, 'prediksi'])->name('post-prediksi');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -81,12 +98,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('post-login');
-    
+
     // Register
-    Route::get('/register', [RegisterController::class, 'index'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register'])->name('post-register');
-    
+
+
     Route::get('/test', [TestController::class, 'index'])->name('test');
-    
+
 });
 

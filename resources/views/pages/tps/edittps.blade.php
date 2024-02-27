@@ -8,7 +8,7 @@
         Edit Data TPS
     </h1>
     <div class="section-header-breadcrumb">
-        <div class="breadcrumb-item active"><a href="{{route('tps')}}">Data TPS</a></div>
+        <div class="breadcrumb-item active"><a href="{{ route('tps') }}">Data TPS</a></div>
         <div class="breadcrumb-item">Edit Data TPS</div>
     </div>
 @endsection
@@ -31,43 +31,97 @@
                     <h4>Formulir data TPS</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{route('update-tps', ['id' => $data->tps])}}" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label for="nama_tps">Nomer TPS:</label>
-                            <input type="number" class="form-control" id="tps" value="{{$data->tps}}" name="tps" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="nama_tps">Nama TPS:</label>
-                            <input type="text" class="form-control" id="nama_tps" value="{{$data->nama_tps}}" name="nama_tps" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="alamat">Alamat:</label>
-                            <input type="text" class="form-control" id="alamat" value="{{$data->alamat}}" name="alamat" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="rt">RT:</label>
-                            <input type="number" class="form-control" id="rt" value="{{$data->rt}}" name="rt" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="rw">RW:</label>
-                            <input type="number" class="form-control" id="rw" value="{{$data->rw}}" name="rw" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="foto">Foto TPS</label>
-                            <input type="file" class="form-control-file" id="foto" name="foto">
-                        </div>
-                        <div class="form-group">
-                            <label for="long">Longitude:</label>
-                            <input type="text" class="form-control" id="long" value="{{$data->long}}" name="long">
-                        </div>
-                        <div class="form-group">
-                            <label for="latitude">Latitude:</label>
-                            <input type="text" class="form-control" id="latitude" value="{{$data->lat}}" name="latitude" >
-                        </div>
-                        <button type="submit" class="btn btn-primary">Edit</button>
-                    </form>
+                    @if ($data->status == 2)
+                        <form action="{{ route('update-tps', ['id' => $data->tps]) }}" method="post"
+                            onsubmit="return validateForm()" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <img src="{{ asset('storage/' . $data->foto) }}" alt="Foto TPS" class="img-thumbnail">
+                            <div class="form-group">
+                                <label for="nama_tps">Nomer TPS:</label>
+                                <input type="number" class="form-control" id="tps" value="{{ $data->tps }}"
+                                    name="tps" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="nama_tps">Nama TPS:</label>
+                                <input type="text" class="form-control" id="nama_tps" value="{{ $data->nama_tps }}"
+                                    name="nama_tps" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="alamat">Alamat:</label>
+                                <input type="text" class="form-control" id="alamat" value="{{ $data->alamat }}"
+                                    name="alamat" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="rt">RT:</label>
+                                <input type="number" class="form-control" id="rt" value="{{ $data->rt }}"
+                                    name="rt" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="rw">RW:</label>
+                                <input type="number" class="form-control" id="rw" value="{{ $data->rw }}"
+                                    name="rw" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="long">Longitude:</label>
+                                <input type="text" class="form-control" id="long" value="{{ $data->long }}"
+                                    name="long" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="latitude">Latitude:</label>
+                                <input type="text" class="form-control" id="latitude" value="{{ $data->lat }}"
+                                    name="latitude" readonly>
+                            </div>
+                        </form>
+                    @else
+                        <form action="{{ route('update-tps', ['id' => $data->tps]) }}" method="post"
+                            onsubmit="return validateForm()" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <img src="{{ asset('storage/' . $data->foto) }}" alt="Foto TPS" class="img-thumbnail">
+                            <div class="form-group">
+                                <label for="nama_tps">Nomer TPS:</label>
+                                <input type="number" class="form-control" id="tps" value="{{ $data->tps }}"
+                                    name="tps" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="nama_tps">Nama TPS:</label>
+                                <input type="text" class="form-control" id="nama_tps" value="{{ $data->nama_tps }}"
+                                    name="nama_tps" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="alamat">Alamat:</label>
+                                <input type="text" class="form-control" id="alamat" value="{{ $data->alamat }}"
+                                    name="alamat" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rt">RT:</label>
+                                <input type="number" class="form-control" id="rt" value="{{ $data->rt }}"
+                                    name="rt" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rw">RW:</label>
+                                <input type="number" class="form-control" id="rw" value="{{ $data->rw }}"
+                                    name="rw" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="foto">Foto TPS</label>
+                                <input type="file" class="form-control-file" id="foto" name="foto">
+                            </div>
+                            <div class="form-group">
+                                <label for="long">Longitude:</label>
+                                <input type="text" class="form-control" id="long" value="{{ $data->long }}"
+                                    name="long">
+                            </div>
+                            <div class="form-group">
+                                <label for="latitude">Latitude:</label>
+                                <input type="text" class="form-control" id="latitude" value="{{ $data->lat }}"
+                                    name="latitude">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </form>
+                    @endif
+
                 </div>
             </div>
         </div>

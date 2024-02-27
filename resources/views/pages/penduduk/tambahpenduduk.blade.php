@@ -20,6 +20,11 @@
 @section('body')
     <div class="row">
         <div class="col-12 mb-4">
+            @if (Session::has('error'))
+                <div class="alert alert-danger">
+                    {{ Session::get('error') }}
+                </div>
+            @endif
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -27,6 +32,11 @@
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
                 </div>
             @endif
             <div class="card">
@@ -54,6 +64,10 @@
                     <form action="{{ route('post-penduduk-single') }}" method="post" onsubmit="return validateForm()">
                         @csrf
                         <div class="form-group">
+                            <label for="nik">NIK:</label>
+                            <input type="number" class="form-control" id="nik" name="nik" required>
+                        </div>
+                        <div class="form-group">
                             <label for="nama">Nama:</label>
                             <input type="text" class="form-control" id="nama" name="nama" required>
                         </div>
@@ -70,7 +84,7 @@
                             <input type="number" class="form-control" id="rw" name="rw" required>
                         </div>
                         <div class="form-group">
-                            <label for="tps">TPS:</label>
+                            <label for="tps">TPS (Isi 0 jika akan di klasifikasi):</label>
                             <input type="text" class="form-control" id="tps" name="tps">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
