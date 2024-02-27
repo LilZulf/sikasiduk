@@ -39,9 +39,9 @@
                     <h2>Selamat Datang, {{ $user->name }}</h2>
                     <p class="lead">Pemilu sarana integrasi bangsa!</p>
                     <div class="mt-4">
-                        <span class="badge badge-light">
+                        {{-- <span class="badge badge-light">
                             <p>100 Hari Menuju Pemilu</p>
-                        </span>
+                        </span> --}}
                     </div>
                 </div>
             </div>
